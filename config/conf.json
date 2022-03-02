@@ -1,0 +1,92 @@
+{
+   "controller":{
+      "database_option":{
+         "-1":"accounting",
+         "1":"sales_product"
+      },
+      "switch_db":[
+         "s",
+         "change",
+         "switch"
+      ],
+      "setup":[
+         "set",
+         "setup"
+      ],
+      "landing":[
+         "l",
+         "land",
+         "landing"
+      ],
+      "extract":[
+         "ext",
+         "extract"
+      ],
+      "transfer":[
+         "t",
+         "trans",
+         "transfer"
+      ],
+      "load":[
+         "load",
+         "loading"
+      ],
+      "exit":[
+         "e",
+         "exit"
+      ],
+      "auto":[
+         "etl",
+         "auto"
+      ],
+      "drop":[
+         "d",
+         "drop",
+         "delete",
+         "rm"
+      ]
+   },
+   "csv":{
+      "sales_product_raw_main":"./data/sales/main/",
+      "sales_product_raw_def":"./data/sales/def/",
+      "accounting_raw_main":"./data/accounting/main/",
+      "accounting_raw_def":"./data/accounting/def/"
+   },
+   "mysql":{
+      "local_connection":{
+         "host":"localhost",
+         "user":"xing",
+         "port":"3306"
+      },
+      "schema":{
+         "accounting": {
+            "DDL": "./config/accounting_DDL.txt",
+            "main": "fact_accounting"
+         },
+         "sales_product": {
+            "DDL": "./config/sales_product_DDL.txt",
+            "landing":["Order ID", "Product", "Quantity Ordered", "Price Each", "Order Date", "Purchase Address"],
+            "main": "fact_order"
+         }
+      },
+      "engine":"mysql+pymysql://{user}:{password}@{host}:{port}/{db_name}",
+      "switch": "USE {db_name};",
+      "select":"SELECT * FROM {}.{};",
+      "drop":"DROP SCHEMA IF EXISTS {};"
+   }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

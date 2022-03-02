@@ -1,0 +1,26 @@
+CREATE SCHEMA IF NOT EXISTS sales_product;
+USE sales_product;
+CREATE TABLE IF NOT EXISTS dim_product(
+	product_code INTEGER PRIMARY KEY AUTO_INCREMENT,
+    product_name VARCHAR(100),
+    CONSTRAINT uniq_product UNIQUE(product_name)
+);
+CREATE TABLE IF NOT EXISTS dim_date(
+	date_code DATE PRIMARY KEY,
+    year INTEGER NOT NULL,
+    month INTEGER NOT NULL,
+    day INTEGER NOT NULL,
+    quarter INTEGER,
+    CONSTRAINT quarter_value CHECK (quarter <= 4 AND quarter >= 1)
+);
+CREATE TABLE IF NOT EXISTS fact_order(
+	order_id VARCHAR(10) PRIMARY KEY,
+	product_code INTEGER NOT NULL,
+	quantity INTEGER NOT NULL,
+	item_price DOUBLE NOT NULL,
+	datetime_code DATE NOT NULL,
+	time TIME NOT NULL,
+	address VARCHAR(100) NOT NULL,
+	FOREIGN KEY (product_code) REFERENCES dim_product(product_code) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (datetime_code) REFERENCES dim_date(date_code) ON DELETE CASCADE ON UPDATE CASCADE
+);

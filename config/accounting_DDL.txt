@@ -1,0 +1,36 @@
+CREATE SCHEMA IF NOT EXISTS accounting;
+USE accounting;
+CREATE TABLE IF NOT EXISTS dim_glcode(
+    gl_code VARCHAR(50) PRIMARY KEY,
+    desription VARCHAR(50) NOT NULL,
+    CONSTRAINT uniq_gl_code UNIQUE(desription)
+);
+CREATE TABLE IF NOT EXISTS dim_type(
+    type_code INTEGER PRIMARY KEY AUTO_INCREMENT,
+    type_name VARCHAR(50) NOT NULL,
+    CONSTRAINT uniq_type UNIQUE(type_name)
+);
+CREATE TABLE IF NOT EXISTS dim_date(
+    date_code DATE PRIMARY KEY,
+    year INTEGER NOT NULL,
+    month INTEGER NOT NULL,
+    day INTEGER NOT NULL,
+    quarter INTEGER,
+    CONSTRAINT quarter_value CHECK (quarter <= 4 AND quarter >= 1)
+);
+CREATE TABLE IF NOT EXISTS fact_Hierarchy(
+    node_id INTEGER PRIMARY KEY,
+    node_name VARCHAR(50),
+    parent_node INTEGER,
+    CONSTRAINT uniq_hierarchy UNIQUE(node_name)
+);
+CREATE TABLE IF NOT EXISTS fact_accounting(
+    gl_code VARCHAR(50) NOT NULL,
+    date_code DATE NOT NULL,
+    type_code INTEGER NOT NULL,
+    value DOUBLE NOT NULL,
+    CONSTRAINT uniq_row UNIQUE(gl_code, date_code, type_code, value),
+    FOREIGN KEY (gl_code) REFERENCES dim_glcode(gl_code) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (date_code) REFERENCES dim_date(date_code) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (type_code) REFERENCES dim_type(type_code) ON DELETE CASCADE ON UPDATE CASCADE
+);
